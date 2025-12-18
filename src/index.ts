@@ -109,14 +109,47 @@ function normalize(p: KenerPayload) {
     };
 }
 
+function formatTime(iso: string): string {
+    try {
+        return (
+            new Date(iso).toLocaleString("en-GB", {
+                dateStyle: "medium",
+                timeStyle: "short",
+                timeZone: "UTC",
+            }) + " UTC"
+        );
+    } catch {
+        return iso;
+    }
+}
+
 function buildTelegramMessage(k: ReturnType<typeof normalize>): string {
-    const emoji =
+    const statusEmoji =
         k.status === "TRIGGERED" ? "🚨" : k.status === "RESOLVED" ? "✅" : "ℹ️";
+    const severityEmoji =
+        k.severity === "critical"
+            ? "🔴"
+            : k.severity === "warning"
+            ? "🟠"
+            : "🟢";
 
     const lines: string[] = [];
-    lines.push(`<b>${escapeHtml(`${emoji} ${k.alertName}`)}</b>`);
+    lines.push(`<b>${escapeHtml(`${statusEmoji} ${k.alertName}`)}</b>`);
+
+    if (k.description) {
+        lines.push("");
+        lines.push(escapeHtml(k.description));
+    }
+
+    lines.push("");
+    lines.push(
+        `${severityEmoji} <b>Severity:</b> <code>${escapeHtml(
+            k.severity
+        )}</code>`
+    );
     lines.push(`<b>Status:</b> <code>${escapeHtml(k.status)}</code>`);
-    lines.push(`<b>Severity:</b> <code>${escapeHtml(k.severity)}</code>`);
+    if (k.source)
+        lines.push(`<b>Source:</b> <code>${escapeHtml(k.source)}</code>`);
     if (k.metric)
         lines.push(`<b>Monitor:</b> <code>${escapeHtml(k.metric)}</code>`);
     if (k.currentValue !== null)
@@ -128,10 +161,12 @@ function buildTelegramMessage(k: ReturnType<typeof normalize>): string {
             `<b>Threshold:</b> <code>${escapeHtml(String(k.threshold))}</code>`
         );
     if (k.timestamp)
-        lines.push(`<b>Time:</b> <code>${escapeHtml(k.timestamp)}</code>`);
+        lines.push(
+            `<b>Time:</b> <code>${escapeHtml(formatTime(k.timestamp))}</code>`
+        );
     if (k.actionUrl)
         lines.push(
-            `<a href="${escapeHtml(k.actionUrl)}">${escapeHtml(
+            `\n<a href="${escapeHtml(k.actionUrl)}">${escapeHtml(
                 k.actionText
             )}</a>`
         );
