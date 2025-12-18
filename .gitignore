@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.local
+
+# VS Code settings (keep launch config, ignore general state)
+.vscode/*
+!.vscode/launch.json
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# pnpm store
+.pnpm-store/
