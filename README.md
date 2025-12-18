@@ -72,12 +72,12 @@ docker run --env-file .env -p 3000:3000 kener-telegram-relay
 | Method | Path      | Purpose                                                   |
 | ------ | --------- | --------------------------------------------------------- |
 | `GET`  | `/health` | Returns `ok` for health checks.                           |
-| `POST` | `/kener`  | Accepts a Kener webhook payload and forwards to Telegram. |
+| `POST` | `/`       | Accepts a Kener webhook payload and forwards to Telegram. |
 
 ## Testing the relay locally
 
 ```bash
-curl -X POST http://localhost:3000/kener \
+curl -X POST http://localhost:3000/ \
   -H "Content-Type: application/json" \
   -H "x-kener-token: ${KENER_WEBHOOK_SECRET}" \
   -d '{

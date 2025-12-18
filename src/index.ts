@@ -173,7 +173,7 @@ app.get("/health", (_req: Request, res: Response) =>
     res.status(200).send("ok")
 );
 
-app.post("/kener", (req: Request, res: Response) => {
+app.post("/", (req: Request, res: Response) => {
     // Optional inbound auth (recommended)
     if (config.kenerWebhookSecret) {
         const got = (req.header("x-kener-token") || "").trim();
