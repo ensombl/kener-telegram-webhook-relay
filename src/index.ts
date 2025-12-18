@@ -125,7 +125,13 @@ function formatTime(iso: string): string {
 
 function buildTelegramMessage(k: ReturnType<typeof normalize>): string {
     const statusEmoji =
-        k.status === "TRIGGERED" ? "🚨" : k.status === "RESOLVED" ? "✅" : "ℹ️";
+        k.status === "TRIGGERED"
+            ? "🚨"
+            : k.status === "RESOLVED"
+            ? "✅"
+            : k.status === "DEGRADED"
+            ? "⚠️"
+            : "ℹ️";
     const severityEmoji =
         k.severity === "critical"
             ? "🔴"
